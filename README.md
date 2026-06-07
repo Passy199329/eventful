@@ -226,7 +226,15 @@ All protected routes require: `Authorization: Bearer <accessToken>`
 | POST | `/qrcode/:ticketId` | Required | Generate QR code |
 | PATCH | `/qrcode/verify` | Required | Verify QR code |
 
----
+
+## API Documentation
+
+[![Run in Postman](https://run.pstmn.io/button.svg)] 
+https://documenter.getpostman.com/view/50459101/2sBXwqrATe
+
+Or view the full API documentation here: [Eventful API Docs] 
+https://documenter.getpostman.com/view/50459101/2sBXwqrATe
+
 
 ## Running Tests
 
