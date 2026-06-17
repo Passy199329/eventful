@@ -44,24 +44,17 @@ export class AuthService {
       lastName: dto.lastName,
     });
 
-    return {
-      message: 'Registration successful',
-      user,
-    };
+    return { message: 'Registration successful', user };
   }
 
   async login(dto: LoginDto) {
-    const user =
-      await this.authRepository.findByEmail(dto.email);
+    const user = await this.authRepository.findByEmail(dto.email);
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      dto.password,
-      user.password,
-    );
+    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
@@ -85,14 +78,55 @@ export class AuthService {
     return { accessToken, refreshToken, user };
   }
 
+  async googleLogin(googleUser: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    picture: string;
+  }) {
+    let user = await this.authRepository.findByEmail(googleUser.email);
+
+    if (!user) {
+      // Create new user if doesn't exist
+      user = await this.authRepository.create({
+        email: googleUser.email,
+        firstName: googleUser.firstName,
+        lastName: googleUser.lastName,
+        password: await bcrypt.hash(Math.random().toString(36), 10),
+      });
+
+      await this.usersRepository.create({
+        userId: user._id.toString(),
+        firstName: googleUser.firstName,
+        lastName: googleUser.lastName,
+      });
+    }
+
+    const payload = {
+      sub: user._id,
+      email: user.email,
+      role: user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload, {
+      expiresIn: this.configService.get('JWT_EXPIRES_IN', '1d'),
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.get('JWT_REFRESH_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
+    });
+
+    return { accessToken, refreshToken, user };
+  }
+
   async refreshToken(token: string) {
     try {
       const payload = this.jwtService.verify(token, {
         secret: this.configService.get('JWT_REFRESH_SECRET'),
       });
 
-      const user =
-        await this.authRepository.findByEmail(payload.email);
+      const user = await this.authRepository.findByEmail(payload.email);
 
       if (!user) {
         throw new UnauthorizedException('User not found');

@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 import { ConfigModule } from './shared/config/config.module';
 import { DatabaseModule } from './shared/database/database.module';
@@ -19,6 +21,14 @@ import { SharingModule } from './modules/sharing/sharing.module';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([
+      {
+        name: 'global',
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
+
     ConfigModule,
     DatabaseModule,
     CacheModule,
@@ -35,6 +45,12 @@ import { SharingModule } from './modules/sharing/sharing.module';
     NotificationsModule,
     AnalyticsModule,
     SharingModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule {}
