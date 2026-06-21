@@ -25,6 +25,10 @@ export class TicketsService {
     return this.ticketsRepository.findByUser(userId);
   }
 
+  async getAllTickets() {
+    return this.ticketsRepository.findAll();
+  }
+
   async getTicketById(id: string) {
     const ticket = await this.ticketsRepository.findById(id);
 

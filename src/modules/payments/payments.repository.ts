@@ -15,6 +15,10 @@ export class PaymentsRepository {
     return this.paymentModel.create(data);
   }
 
+  async findAll() {
+    return this.paymentModel.find().sort({ createdAt: -1 });
+  }
+
   async findByReference(reference: string) {
     return this.paymentModel.findOne({ reference });
   }

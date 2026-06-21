@@ -34,6 +34,10 @@ export class PaymentsService {
     return response.data;
   }
 
+  async getAllPayments() {
+    return this.paymentsRepository.findAll();
+  }
+
   async verifyPayment(reference: string) {
     const payment = await this.paymentsRepository.findByReference(reference);
 

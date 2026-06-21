@@ -29,6 +29,12 @@ export class PaymentsController {
     return this.paymentsService.initiatePayment(user.sub, dto);
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  getAllPayments() {
+    return this.paymentsService.getAllPayments();
+  }
+
   @Get('verify/:reference')
   verifyPayment(@Param('reference') reference: string) {
     return this.paymentsService.verifyPayment(reference);
