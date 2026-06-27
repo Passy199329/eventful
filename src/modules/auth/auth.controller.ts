@@ -41,6 +41,12 @@ export class AuthController {
     return this.authService.refreshToken(dto.refreshToken);
   }
 
+  @Get('me')
+  @UseGuards(AuthGuard('jwt'))
+  getMe(@Req() req: any) {
+    return req.user;
+  }
+
   @Get('google')
   @UseGuards(AuthGuard('google'))
   googleAuth() {}
