@@ -9,6 +9,9 @@ import {
   TicketSchema,
 } from '../tickets/schemas/ticket.schema';
 
+import { EventsModule }
+from '../events/events.module';
+
 import { QrcodeController }
 from './qrcode.controller';
 
@@ -23,6 +26,7 @@ from './qrcode.service';
         schema: TicketSchema,
       },
     ]),
+    EventsModule,
   ],
 
   controllers: [
