@@ -9,6 +9,9 @@ import {
   TicketSchema,
 } from './schemas/ticket.schema';
 
+import { EventsModule }
+from '../events/events.module';
+
 import { TicketsController }
 from './tickets.controller';
 
@@ -26,6 +29,7 @@ from './tickets.repository';
         schema: TicketSchema,
       },
     ]),
+    EventsModule,
   ],
 
   controllers: [

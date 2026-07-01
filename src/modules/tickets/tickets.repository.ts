@@ -23,6 +23,10 @@ export class TicketsRepository {
     return this.ticketModel.find({ userId });
   }
 
+  async findByEventIds(eventIds: string[]) {
+    return this.ticketModel.find({ eventId: { $in: eventIds } });
+  }
+
   async findById(id: string) {
     return this.ticketModel.findById(id);
   }

@@ -3,6 +3,23 @@ import { HydratedDocument } from 'mongoose';
 
 export type EventDocument = HydratedDocument<Event>;
 
+@Schema({ _id: false })
+export class TicketTier {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  price: number;
+
+  @Prop({ required: true })
+  capacity: number;
+
+  @Prop({ default: 0 })
+  sold: number;
+}
+
+export const TicketTierSchema = SchemaFactory.createForClass(TicketTier);
+
 @Schema({ timestamps: true })
 export class Event {
   @Prop({ required: true })
@@ -23,20 +40,14 @@ export class Event {
   @Prop({ required: true })
   endDate: Date;
 
-  @Prop({ required: true })
-  price: number;
+  @Prop({ type: [TicketTierSchema], required: true })
+  ticketTiers: TicketTier[];
 
   @Prop()
   bannerImage: string;
 
   @Prop({ default: 'DRAFT' })
   status: string;
-
-  @Prop({ default: 0 })
-  capacity: number;
-
-  @Prop({ default: 0 })
-  ticketsSold: number;
 
   @Prop({ default: true })
   isActive: boolean;

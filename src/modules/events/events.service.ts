@@ -1,4 +1,3 @@
-
 import {
   Injectable,
   NotFoundException,
@@ -22,6 +21,9 @@ export class EventsService {
     return this.eventsRepository.create({
       creatorId,
       ...dto,
+      // CreateEventDto's tiers come in without a `sold` count, since the
+      // creator never sets that — it's always 0 at creation time.
+      ticketTiers: dto.ticketTiers.map(tier => ({ ...tier, sold: 0 })),
     });
   }
 
