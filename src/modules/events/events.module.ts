@@ -39,6 +39,7 @@ from './events.repository';
 
   exports: [
     EventsService,
+    EventsRepository,
   ],
 })
 export class EventsModule {}
