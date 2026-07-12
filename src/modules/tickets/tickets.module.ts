@@ -1,25 +1,11 @@
-import { Module }
-from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { MongooseModule }
-from '@nestjs/mongoose';
-
-import {
-  Ticket,
-  TicketSchema,
-} from './schemas/ticket.schema';
-
-import { EventsModule }
-from '../events/events.module';
-
-import { TicketsController }
-from './tickets.controller';
-
-import { TicketsService }
-from './tickets.service';
-
-import { TicketsRepository }
-from './tickets.repository';
+import { Ticket, TicketSchema } from './schemas/ticket.schema';
+import { EventsModule } from '../events/events.module';
+import { TicketsController } from './tickets.controller';
+import { TicketsService } from './tickets.service';
+import { TicketsRepository } from './tickets.repository';
 
 @Module({
   imports: [
@@ -31,18 +17,14 @@ from './tickets.repository';
     ]),
     EventsModule,
   ],
-
-  controllers: [
-    TicketsController,
-  ],
-
+  controllers: [TicketsController],
   providers: [
     TicketsService,
     TicketsRepository,
   ],
-
   exports: [
     TicketsService,
+    TicketsRepository,
   ],
 })
 export class TicketsModule {}
