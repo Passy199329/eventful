@@ -19,6 +19,16 @@ export class PaymentsRepository {
     return this.paymentModel.find().sort({ createdAt: -1 });
   }
 
+  async findByUser(userId: string) {
+    return this.paymentModel.find({ userId }).sort({ createdAt: -1 });
+  }
+
+  async findByTicketIds(ticketIds: string[]) {
+    return this.paymentModel
+      .find({ ticketId: { $in: ticketIds } })
+      .sort({ createdAt: -1 });
+  }
+
   async findByReference(reference: string) {
     return this.paymentModel.findOne({ reference });
   }

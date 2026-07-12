@@ -29,6 +29,21 @@ export class PaymentsController {
     return this.paymentsService.initiatePayment(user.sub, dto);
   }
 
+  // Named routes must come BEFORE the wildcard @Get('verify/:reference')
+  // otherwise NestJS would match 'my-purchases' and 'received' as a
+  // :reference param value instead of their own routes.
+  @Get('my-purchases')
+  @UseGuards(JwtAuthGuard)
+  getMyPurchases(@CurrentUser() user: any) {
+    return this.paymentsService.getMyPurchases(user.sub);
+  }
+
+  @Get('received')
+  @UseGuards(JwtAuthGuard)
+  getReceivedPayments(@CurrentUser() user: any) {
+    return this.paymentsService.getReceivedPayments(user.sub);
+  }
+
   @Get()
   @UseGuards(JwtAuthGuard)
   getAllPayments() {
