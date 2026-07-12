@@ -26,21 +26,19 @@ export class TicketsService {
       );
     }
 
-    // Atomic capacity check + increment: only succeeds if the remaining
-    // capacity in this specific tier can cover the requested quantity.
-    // This prevents overselling if two people buy the last tickets at
-    // the same moment.
-    const updatedEvent = await this.eventsRepository.incrementTierSold(
+    const remaining = tier.capacity - tier.sold;
+    if (remaining < dto.quantity) {
+      throw new BadRequestException(
+        `Not enough "${dto.ticketType}" tickets left. Only ${remaining} remaining.`,
+      );
+    }
+
+    // Increment sold count on the matching tier
+    await this.eventsRepository.incrementTierSold(
       dto.eventId,
       dto.ticketType,
       dto.quantity,
     );
-
-    if (!updatedEvent) {
-      throw new BadRequestException(
-        `Not enough "${dto.ticketType}" tickets left for this event`,
-      );
-    }
 
     const totalPrice = tier.price * dto.quantity;
 
