@@ -1,22 +1,10 @@
-import { Module }
-from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { MongooseModule }
-from '@nestjs/mongoose';
-
-import {
-  Event,
-  EventSchema,
-} from './schemas/event.schema';
-
-import { EventsController }
-from './events.controller';
-
-import { EventsService }
-from './events.service';
-
-import { EventsRepository }
-from './events.repository';
+import { Event, EventSchema } from './schemas/event.schema';
+import { EventsController } from './events.controller';
+import { EventsService } from './events.service';
+import { EventsRepository } from './events.repository';
 
 @Module({
   imports: [
@@ -27,16 +15,11 @@ from './events.repository';
       },
     ]),
   ],
-
-  controllers: [
-    EventsController,
-  ],
-
+  controllers: [EventsController],
   providers: [
     EventsService,
     EventsRepository,
   ],
-
   exports: [
     EventsService,
     EventsRepository,
